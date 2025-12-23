@@ -28,11 +28,10 @@ COPY . .
 
 # Patch for iOS/macOS to work with Hydroxide
 #   remove the following logic: if wantValue == "" && len(values) == 0
-RUN sed -i '
-    /if wantValue == "" && len(values) == 0 {/ {
-        n; d
-    }
-' imap/mailbox.go
+RUN sed -i \
+  -e '/if wantValue == "" && len(values) == 0 {/{n;d}' \
+  -e '/if wantValue == "" && len(values) == 0 {/d' \
+  imap/mailbox.go
 
 # build hydroxide
 RUN go build ./cmd/hydroxide && go install ./cmd/hydroxide
